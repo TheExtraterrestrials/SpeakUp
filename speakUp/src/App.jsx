@@ -5,7 +5,7 @@ import ChatPage from '../pages/ChatPage.jsx';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/SpeakUp">
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/chat" element={<ChatPage />} />
