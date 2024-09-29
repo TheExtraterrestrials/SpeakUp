@@ -1,0 +1,88 @@
+.chat-page {
+    background-color: #1e1e1e; /* Dark background */
+    padding: 20px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* border-radius: 10px; */
+    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); */
+    color: white;
+  }
+  
+  .messages {
+    overflow-y: auto;
+    flex-grow: 1;
+    margin-bottom: 20px;
+    padding-right: 10px;
+    max-height: 75vh;
+  }
+  
+  .message {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 70%;
+  }
+  
+  .user {
+    align-self: flex-end;
+    background-color: #00bfff;
+  }
+  
+  .bot {
+    align-self: flex-start;
+  }
+  
+  .input-section {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #2d2d2d; /* Darker background for input section */
+    border-radius: 10px;
+  }
+  
+  input {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3b3b3b;
+    color: white;
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+  
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  input:focus {
+    outline: none;
+  }
+  
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  .send-btn {
+    color: #007bff;
+  }
+  
+  .mic-btn {
+    color: #ff5722;
+  }
+  
+  .mic-btn.listening {
+    color: #f44336;
+  }
+  
