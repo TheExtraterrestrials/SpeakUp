@@ -4,14 +4,21 @@ import MicIcon from '@mui/icons-material/Mic';
 import StopIcon from '@mui/icons-material/Stop';
 import Groq from 'groq-sdk';
 
-const groq = new Groq({apiKey:"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",dangerouslyAllowBrowser:true});
+const groq = new Groq({ apiKey: "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", dangerouslyAllowBrowser: true });
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [isListening, setIsListening] = useState(false);
+  const [transcription, setTranscription] = useState('');
+  const [isPredicting, setIsPredicting] = useState(false);
+  
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunks = useRef([]);
+
+  const SAMPLE_RATE = 16000;
+  const PAUSE_DURATION_2S = 200000; // 2 seconds
+  let pauseTimer = null;
 
   // Scroll to the bottom whenever messages are updated
   const scrollToBottom = () => {
@@ -48,19 +55,20 @@ const ChatPage = () => {
       // Call Groq for transcription
       try {
         const transcription = await groq.audio.transcriptions.create({
-          file: audioFile, // Pass the File object directly
-          model: "distil-whisper-large-v3-en", // Specify your model
-          response_format: "json", // Optional
-          language: "en", // Optional
-          temperature: 0.0, // Optional
+          file: audioFile,
+          model: "distil-whisper-large-v3-en",
+          response_format: "json",
+          language: "en",
+          temperature: 0.0,
         });
 
-        // Log and display the transcribed text
-        console.log(transcription.text);
+        const transcribedText = transcription.text.trim();
+        console.log('Transcription:', transcribedText);
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: transcription.text, sender: 'bot' },
+          { text: transcribedText, sender: 'user' },
         ]);
+        handlePrediction(transcribedText); // Trigger prediction after transcription
       } catch (error) {
         console.error('Error during transcription:', error);
       }
@@ -75,14 +83,60 @@ const ChatPage = () => {
     }
   };
 
+  const handlePrediction = async (inputText) => {
+    setIsPredicting(true);
+    try {
+      const response = await groq.chat.completions.create({
+        messages: [
+          {
+            role: 'system',
+            content: "You are a sentence completion model. Suggest possible next words for the given input. Keep it short.",
+          },
+          {
+            role: 'user',
+            content: `Complete this sentence '${inputText}'`,
+          },
+        ],
+        model: "llama3-8b-8192",
+        temperature: 0.5,
+        max_tokens: 50,
+        top_p: 1,
+      });
+      
+      const predictedText = response.choices[0].message.content;
+      console.log('Next Word Prediction:', predictedText);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: predictedText, sender: 'ai' }, // Add AI response to messages
+      ]);
+    } catch (error) {
+      console.error('Error fetching predictions:', error);
+    } finally {
+      setIsPredicting(false);
+    }
+  };
+
+  const handlePauseDetection = () => {
+    if (pauseTimer) clearTimeout(pauseTimer);
+
+    pauseTimer = setTimeout(() => {
+      if (transcription) {
+        handlePrediction(transcription); // Call next-word prediction after a pause
+      }
+    }, PAUSE_DURATION_2S); // 2-second pause for detection
+  };
+
+  useEffect(() => {
+    if (isListening) {
+      handlePauseDetection();
+    }
+  }, [transcription]);
+
   return (
     <div className="chat-page">
       <div className="messages">
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${message.sender === 'user' ? 'user' : 'bot'}`}
-          >
+          <div key={index} className={message.sender === 'user' ? 'user-message' : 'ai-message'}>
             {message.text}
           </div>
         ))}
@@ -97,6 +151,8 @@ const ChatPage = () => {
           {isListening ? <StopIcon /> : <MicIcon />}
         </button>
       </div>
+
+      {isPredicting && <div className="loader">Predicting next words...</div>}
     </div>
   );
 };
