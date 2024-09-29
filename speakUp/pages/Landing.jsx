@@ -1,23 +1,48 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import '../styles/landing.css'
-import Bg from '../src/assets/bg.mp4'
+import React from 'react';
+import Navbar from '../components/Navbar';
+import '../styles/landing.css';
 
 export default function Landing() {
   return (
     <div className='page-wrapper'>
-    <video autoPlay loop muted className='video'>
-        <source src={Bg} type='video/mp4' />
-        </video>
-    <div className='nav-wrapper'> <Navbar /> </div>
-    <div className='landing-main'>
-    <div className='content-divs'>
-        <h1 className='heading'>A platform to enhance Your<br /> speech</h1>
-        <p className='para'>SpeakUp is a the world. You can create posts, comment on other posts, and upvote or downvote posts. SpeakUp is a place where you can express yourself freely and connect with others who share your interests.</p>
-        <button className='btn'>Get Started</button>
+      <div className='nav-wrapper'>
+        <Navbar />
+      </div>
+
+      <div className='landing-main'>
+        <div className='content-div'>
+          <h1 className='heading'>
+            AI-Powered Speech Therapy <br /> Tailored for You
+          </h1>
+          <p className='para'>
+            SpeakUp is your personal AI-driven speech coach, designed to help you improve your communication skills through personalized exercises, real-time feedback, and community support.
+          </p>
+          <button className='btn'>Start Now</button>
+        </div>
+
+        <div className='image-div'>
+          <img 
+            src='/assets/speech-therapy-mobile.png' 
+            alt='Speech Therapy AI App' 
+            className='landing-image' 
+          />
+        </div>
+
+        <div className='features-div'>
+          <h2 className='features-heading'>Why Choose SpeakUp?</h2>
+          <ul className='features-list'>
+            <li>Personalized AI Speech Coach</li>
+            <li>Real-Time Chat and Feedback</li>
+            <li>Progress Tracking and Reports</li>
+            <li>Community Support</li>
+          </ul>
+        </div>
+
+        <div className='cta-section'>
+          <p className='cta-text'>Ready to improve your speech?</p>
+          <button className='cta-btn'>Join Now</button>
+        </div>
+      </div>
     </div>
-    </div>
-    
-    </div>
-  )
+  );
 }

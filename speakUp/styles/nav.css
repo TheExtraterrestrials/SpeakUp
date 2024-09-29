@@ -1,37 +1,98 @@
-.nav-main{
+/* Base Styles */
+.nav-main {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Ensures proper spacing between logo and menu icon */
     align-items: center;
-    padding: 1.5rem 3.3rem;
-    /* background-color: #f8f9fa; */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: 12vh;
-}
-.nav-main h1{
-    font-size: 1.5rem;
-    font-weight: 600;
-    /* color: #111010; */
-}
-.nav-main ul{
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+  }
+  
+  .nav-logo h1 {
+    font-size: 1.8rem;
+    color: #2b2e4a;
+    font-weight: 700;
+  }
+  
+  .nav-links ul {
     display: flex;
-    gap: 2rem;
-    justify-content: space-between;
-    align-items: center;
-}
-.nav-main ul li{
     list-style: none;
-    margin-right: 1rem;
-}
-.nav-main ul li a{
-    text-decoration: none;
-    /* color: #333; */
+    gap: 20px;
+  }
+  
+  .nav-links ul li {
     font-size: 1rem;
-    font-weight: 1000;
-}
-li:hover{
-    color: #007bff;
+    font-weight: 600;
+    color: #595959;
     cursor: pointer;
-}
-.nav-main ul li a:hover{
-    color: #007bff;
-}
+    transition: color 0.3s ease;
+  }
+  
+  .nav-links ul li:hover {
+    color: #ff6347;
+  }
+  
+  /* Sign In Button Style */
+  .nav-links ul .sign-in {
+    background-color: #ff6347;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-links ul .sign-in:hover {
+    background-color: #e55347;
+  }
+  
+  /* Mobile Menu Icon */
+  .mobile-menu-icon {
+    display: none;
+    font-size: 2rem;
+    color: #2b2e4a;
+    cursor: pointer;
+    margin-left: auto; /* Aligns the mobile menu icon to the right */
+  }
+  
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .nav-links ul {
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      width: 100%;
+      background-color: #fff;
+      padding: 20px;
+      display: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  
+    .nav-links.mobile-open ul {
+      display: flex;
+    }
+  
+    .nav-links ul li {
+      margin-bottom: 10px;
+    }
+  
+    .mobile-menu-icon {
+      display: block;
+      margin-left: auto; /* Ensures the icon is always on the right */
+    }
+  }
+  
+  /* Tablet/Desktop Styles */
+  @media (min-width: 769px) {
+    .nav-links ul {
+      display: flex;
+      position: static;
+      background-color: transparent;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+  

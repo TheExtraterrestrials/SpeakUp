@@ -1,58 +1,194 @@
+/* Base Styles */
 .page-wrapper {
-    height: 100vh;
-    width: 100vw;
-    color: white;
-}
-video{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    padding: 20px;
+  }
+  
+  .nav-wrapper {
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-.landing-main{
+    z-index: 100;
+  }
+  
+  .landing-main {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: 1.5rem 2.5rem;
-    /* background-color: #000000; */
-    height: calc(100vh - 12vh);
-}
-
-.btn{
-    padding: 0.5rem 1.5rem;
-    background-color: #007bff;
+    width: 100%;
+    padding-top: 70px; /* To accommodate the fixed navbar */
+  }
+  
+  /* Content Section */
+  .content-div {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2b2e4a;
+    margin-bottom: 15px;
+  }
+  
+  .para {
+    font-size: 1rem;
+    color: #595959;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background-color: #ff6347;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #e55347;
+  }
+  
+  /* Features Section */
+  .features-div {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .features-heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2b2e4a;
+    margin-bottom: 15px;
+  }
+  
+  .features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .features-list li {
     font-size: 1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.btn:hover{
-    background-color: #0056b3;
-}
-.content-divs{
+    color: #595959;
+    line-height: 1.8;
+    margin-bottom: 10px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    flex-direction: column;
-    padding: 1.5rem 2.5rem;
-    height: calc(100vh - 40vh);
-}
-.para{
+    gap: 10px;
+  }
+  
+  /* Icons for features */
+  .features-list li::before {
+    content: '✔️';
+    margin-right: 5px;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .cta-text {
     font-size: 1.2rem;
-    font-weight: 200;
-    text-align: center;
-    width: 70%;
-}
-.heading{
-    font-size: 2rem;
-    font-weight: 600;
-    width: 80%;
-    text-align: center;
-}
+    color: #595959;
+    margin-bottom: 15px;
+  }
+  
+  .cta-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-btn:hover {
+    background-color: #e55347;
+  }
+  
+  /* Responsive Image Section */
+  .image-div {
+    max-width: 100%;
+    margin: 20px 0;
+  }
+  
+  .landing-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mobile-First Design (No media query required for base) */
+  
+  /* Tablet */
+  @media (min-width: 768px) {
+    .heading {
+      font-size: 2rem;
+    }
+  
+    .para {
+      font-size: 1.1rem;
+    }
+  
+    .features-list li {
+      font-size: 1.1rem;
+    }
+  
+    .cta-text {
+      font-size: 1.3rem;
+    }
+  
+    .landing-main {
+      padding: 50px 30px;
+    }
+  }
+  
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .landing-main {
+      padding-top: 100px; /* Adjust for larger screens */
+    }
+  
+    .heading {
+      font-size: 2.5rem;
+    }
+  
+    .para {
+      font-size: 1.3rem;
+    }
+  
+    .features-list li {
+      font-size: 1.2rem;
+    }
+  
+    .cta-text {
+      font-size: 1.5rem;
+    }
+  
+    .btn, .cta-btn {
+      padding: 14px 30px;
+      font-size: 1.2rem;
+    }
+  }
+  

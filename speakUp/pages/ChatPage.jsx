@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/ChatPage.css';
-import SendIcon from '@mui/icons-material/Send';
 import MicIcon from '@mui/icons-material/Mic';
 import StopIcon from '@mui/icons-material/Stop';
+import Groq from 'groq-sdk';
 
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.continuous = true;
-recognition.interimResults = false;
-recognition.lang = 'en-US';
+const groq = new Groq({apiKey:"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",dangerouslyAllowBrowser:true});
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
   const [isListening, setIsListening] = useState(false);
-  const messagesEndRef = useRef(null); // For autoscroll
+  const messagesEndRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunks = useRef([]);
 
   // Scroll to the bottom whenever messages are updated
   const scrollToBottom = () => {
@@ -26,30 +22,57 @@ const ChatPage = () => {
     scrollToBottom();
   }, [messages]);
 
-  useEffect(() => {
-    recognition.onresult = (event) => {
-      const transcript = event.results[event.resultIndex][0].transcript.trim();
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: transcript, sender: 'user' },
-      ]);
+  const startRecording = async () => {
+    setIsListening(true);
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorderRef.current = new MediaRecorder(stream);
+
+    mediaRecorderRef.current.ondataavailable = (e) => {
+      audioChunks.current.push(e.data);
     };
-  }, []);
+
+    mediaRecorderRef.current.start();
+  };
+
+  const stopRecording = async () => {
+    setIsListening(false);
+    mediaRecorderRef.current.stop();
+
+    mediaRecorderRef.current.onstop = async () => {
+      const blob = new Blob(audioChunks.current, { type: 'audio/wav' });
+      audioChunks.current = [];
+
+      // Create a File object for the audio blob
+      const audioFile = new File([blob], 'audio.wav', { type: 'audio/wav' });
+
+      // Call Groq for transcription
+      try {
+        const transcription = await groq.audio.transcriptions.create({
+          file: audioFile, // Pass the File object directly
+          model: "distil-whisper-large-v3-en", // Specify your model
+          response_format: "json", // Optional
+          language: "en", // Optional
+          temperature: 0.0, // Optional
+        });
+
+        // Log and display the transcribed text
+        console.log(transcription.text);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: transcription.text, sender: 'bot' },
+        ]);
+      } catch (error) {
+        console.error('Error during transcription:', error);
+      }
+    };
+  };
 
   const handleSpeechInput = () => {
     if (isListening) {
-      recognition.stop();
-      setIsListening(false);
+      stopRecording();
     } else {
-      recognition.start();
-      setIsListening(true);
+      startRecording();
     }
-  };
-
-  const handleSendMessage = () => {
-    if (input.trim() === '') return;
-    setMessages([...messages, { text: input, sender: 'user' }]);
-    setInput('');
   };
 
   return (
@@ -67,16 +90,6 @@ const ChatPage = () => {
       </div>
 
       <div className="input-section">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-        />
-        <button onClick={handleSendMessage} className="send-btn">
-          {/* <SendIcon /> */}
-        </button>
         <button
           className={`mic-btn ${isListening ? 'listening' : ''}`}
           onClick={handleSpeechInput}
